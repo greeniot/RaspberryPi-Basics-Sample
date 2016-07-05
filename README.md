@@ -52,10 +52,10 @@ To this end put the SD card back into your computer and navigate to the root dir
 dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait
 ```
 
-Do not worry if it is not exactly the same, this is just for illustration purposes. This file contains some commands that will be called upon start up of Raspbian. This allows us to perform configurations. Specifically we will assign a unique IP adress to the RPi. Therefore, at the end of the last line in `cmdline.txt` add `ip=192.168.1.XXX`, where `XXX` is some number that should be unique in the network, in particular this should differ from the IP address of your computer. The whole `cmdline.txt` should then read for example
+Do not worry if it is not exactly the same, this is just for illustration purposes. This file contains some commands that will be called upon start up of Raspbian. This allows us to perform configurations. Specifically we will assign a unique IP adress to the RPi. Therefore, at the end of the last line in `cmdline.txt` add `ip=169.254.0.XXX`, where `XXX` is some number that should be unique in the network, in particular this should differ from the IP address of your computer. The whole `cmdline.txt` should then read for example
 
 ```
-dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait ip=192.168.1.32
+dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait ip=169.254.0.2
 ```
 
 >:exclamation: Be careful not the add or remove any empty lines.
@@ -66,12 +66,67 @@ You can now eject the SD card and put it back into the RPi.
 
 ### Connecting via SSH
 
-After the SD card is back in the RPi's card slot, connect an Ethernet cable to both your computer and the RPi's Ethernet port. Then connect the RPi to a power supply via the micro USB port.
+Before connecting the RPi to the computer make sure that you are using the Dynamic Host Configuration Protocol (DHCP), i.e., the computer automatically provides and assigns an IP adress for connections via the Ethernet port.
 
->:exclamation: The default username is `pi` and the default password is `raspberry`.
+#### Linux
 
+TODO
 
-## Step-By-Step
+#### Windows
+
+TODO
+
+#### MacOS
+
+Open the _System Preferences_
+
+![MacOS System Preferences](images/mac_preferences.png)
+
+then click on _Network_
+
+![MacOS Network Preferences](images/mac_network_preferences.png)
+
+and make sure that _Using DHCP_ is selected from the drop down menu.
+
+Once this is set up and the SD card is back in the RPi's card slot, connect an Ethernet cable to both your computer and the RPi's Ethernet port. Then connect the RPi to a power supply via the micro USB port. Now we have to wait for a little for the RPi to boot. (The Ethernet port is _hot-plugging_ capable, i.e., you can connect and disconnect it at any time and it should still work.)
+
+The only platform independent indicator whether everything is working is to try it out. Hence, our next step is to open up a terminal aka. console aka. shell and type
+
+```shell
+ping 169.254.0.XXX
+```
+
+where again `XXX` is to be replaced with the number you chose [above](#assigning-an-ip-address). Ideally the output will look like the following screenshot.
+
+![MacOS Ping Response](images/mac_ping.png)
+
+You can abort the ping command just like any other command with `CTRL + c` or `COMMAND + .`. If this does not work you should wait a couple seconds and try it again. Chances are the RPi has not yet booted and configured the network settings.
+
+If even after multiple tries you see output like in the screenshot below, something went wrong. In that case we recommend checking your computers network setting (make sure DHCP is enabled) and carefully go through the instructions again.
+
+![MacOS Failed Ping Response](images/mac_ping_fail.png)
+
+Now that the RPi responded to our `ping`, we are confident that the connection is established and we can type
+
+```shell
+ssh pi@169.254.0.XXX
+```
+
+Upon request type in the password
+
+```shell
+raspberry
+```
+
+and confirm with the Enter key.
+
+>:exclamation: The default username of a fresh Raspbian installation is `pi` and the default password is `raspberry`.
+
+You should see a short legal disclaimer and the command line prompt should turn into `pi@raspberrypi` like in the screenshot below.
+
+![MacOS SSH](images/mac_ssh.png)
+
+Now we have full control over the Raspberry Pi.
 
 ## Conclusions
 
