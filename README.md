@@ -12,9 +12,9 @@ In contrast to a regular computer the Raspberry Pi (*RPi*) does not have a built
 
 Once we can access the RPi remotely, we will install *NodeJS* and write some JavaScript to verify that NodeJS is working correctly. This enables us to install *raspio* and *johnny-five* via *npm* to take control over the RPi's GPIO pins. After a classic LED-blinking tutorial, we will turn towards some more specialized capabilities of the RPi 3 and send out HTTP(S) requests via WiFi.
 
->:information_source: For the study group we will provide SD cards with prebuilt images that already contain the software stack for various tasks. If you are not planning to setup a RPi yourself, you can thus skip sections TODO.
+>:information_source: For the study group we will provide SD cards with prebuilt images that already contain the software stack for various tasks. If you are not planning to setup a RPi yourself, you can thus skip sections [Requirements](#setup-the-operating-system-image) and [The RPi as a Regular Computer](#the-rpi-as-a-regular-computer).
 
-## Requirements
+## Setup the Operating System Image
 
 First, we will install the Raspbian operating system for the Raspberry Pi. You can download the zip file [https://www.raspberrypi.org/downloads/raspbian/](here). Raspberrypi.org also provides an [https://www.raspberrypi.org/documentation/installation/installing-images/README.md](excellent installation guide) for Linux, MacOS and Windows.
 
@@ -44,6 +44,7 @@ While this is a very convenient and intuitive way to interact with the RPi, it i
 To communicate with the RPi remotely we first need a connection. We will establish this connection via a physical Ethernet cable. In terms of network protocols prehaps _the_ standard way to login on a machine remotely is `ssh` (**S**ecure **Sh**ell).
 
 ### Assigning an IP address
+
 Many online tutorials on remote access of the RPi assume that the the RPi is already connected to the internet or that we know it's IP address in the local network which apparently requires some configuration. Because start from scratch with an RPi that was never hooked up to a monitor and keyboard for prior configuration, we have to initialize all necessary settings right in the image on the SD card.
 
 To this end put the SD card back into your computer and navigate to the root directory. There is a file named `cmdline.txt`. Open this file in your favorite editor, it should read something like
@@ -112,7 +113,7 @@ Now that the RPi responded to our `ping`, we are confident that the connection i
 ssh pi@169.254.0.XXX
 ```
 
-Upon request type in the password
+Remember to replace `XXX` with the chosen number. Upon request type in the password
 
 ```shell
 raspberry
@@ -128,6 +129,37 @@ You should see a short legal disclaimer and the command line prompt should turn 
 
 Now we have full control over the Raspberry Pi.
 
-## Conclusions
+## Installing NodeJS
+
+>:exclamation: In this section we assume that the Raspberry Pi has a working connection to the internet. Hence it applies to the Raspberry Pi 3 and/or previous models equipped with a functioning WiFi shield. During the study group you will receive images with NodeJS pre-installed so you can skip this section and continue with [A First JavaScript Program](#a-first-javascript-program).
+
+[NodeJS](https://nodejs.org/)® is a JavaScript runtime built on Chrome's V8 JavaScript engine. JavaScript is one of the three core technologies for most of the content production on the internet and as such typically executed by browsers. NodeJS allows us to execute JavaScript code outside of a browser from the command line.
+
+On Raspbian we have access to the Linux' **A**dvanced **P**ackage **M**anager (APT). Raspbian actually already comes with NodeJS installed, but it is an old version. You can check this by typing the following in the terminal while you are connected to the RPi
+
+```shell
+nodejs -v
+```
+
+To install a newer version, we first remove the old version and certain tools that depend or build on it, e.g., Node-Red and NPM. For the whole workflow enter all these commands one after the other.
+
+```shell
+sudo apt-get remove nodered -y
+sudo apt-get remove nodejs nodejs-legacy -y
+sudo apt-get remove npm -y # if npm has been installed previously
+sudo curl -sL https://deb.nodesource.com/setup_5.x | sudo bash -
+sudo apt-get install nodejs -y
+```
+
+We can check whether the installation was successful with
+
+```shell
+nodejs -v
+npm -v
+```
+
+The first command should output `v5.11.1` (we only care about the 5 in the beginning) and the second should give something close to `3.8.6`. You can also choose even newer versions of NodeJS by adjusting the link in the `curl` command above. For example, you could replace `setup_5.x` by `setup_6.x`.
+
+## A First JavaScript Program
 
 ## References
