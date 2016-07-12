@@ -228,6 +228,8 @@ Next we need an audio file that we want to play. To this end open another termin
 scp megahit.mp3 pi@169.254.0.XXX:/Music/
 ```
 
+Again, recall that `XXX` has to be replaced by the correct number you assigned to the RPi.
+
 The JavaScript itself is again pretty self-explanatory:
 
 ```js
@@ -243,7 +245,24 @@ fs.createReadStream('/home/pi/Music/megahit.mp3')
 
 ## Using the GPIO Pin
 
+TODO: install johnny-five and raspi-io
+
+```js
+var five = require("johnny-five");
+var raspi = require("raspi-io");
+var board = new five.Board({
+    io: new raspi()
+});
+
+board.on("ready", function() {
+    var led = new five.Led("P1-13");
+    led.blink();
+});
+```
+
 ## References
+
+TODO
 
 
 
