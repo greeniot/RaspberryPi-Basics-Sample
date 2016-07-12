@@ -89,7 +89,7 @@ then click on _Network_
 
 and make sure that _Using DHCP_ is selected from the drop down menu.
 
-Once this is set up and the SD card is back in the RPi's card slot, connect an Ethernet cable to both your computer and the RPi's Ethernet port. Then connect the RPi to a power supply via the micro USB port. Now we have to wait for a little for the RPi to boot. (The Ethernet port is _hot-plugging_ capable, i.e., you can connect and disconnect it at any time and it should still work.)
+Once this is set up and the SD card is back in the RPi's card slot, connect an Ethernet cable to both your computer and the RPi's Ethernet port. Then connect the RPi to a power supply via the micro USB port. Now we have to wait a little bit for the RPi to boot. (The Ethernet port is _hot-plugging_ capable, i.e., you can connect and disconnect it at any time and it should still work.)
 
 The only platform independent indicator whether everything is working is to try it out. Hence, our next step is to open up a terminal aka. console aka. shell and type
 
@@ -97,13 +97,13 @@ The only platform independent indicator whether everything is working is to try 
 ping 169.254.0.XXX
 ```
 
-where again `XXX` is to be replaced with the number you chose [above](#assigning-an-ip-address). Ideally the output will look like the following screenshot.
+where `XXX` is to be replaced with the number you chose [above](#assigning-an-ip-address). Ideally the output will look like the following screenshot.
 
 ![MacOS Ping Response](images/mac_ping.png)
 
-You can abort the ping command just like any other command with `CTRL + c` or `COMMAND + .`. If this does not work you should wait a couple seconds and try it again. Chances are the RPi has not yet booted and configured the network settings.
+You can abort the ping command just like any other command typically with `CTRL + c` (or also `COMMAND + .` on MacOS). If the `ping` test does not work you should wait a couple seconds and try it again. Chances are the RPi has not yet booted and configured the network settings.
 
-If even after multiple tries you see output like in the screenshot below, something went wrong. In that case we recommend checking your computers network setting (make sure DHCP is enabled) and carefully go through the instructions again.
+If even after multiple tries you see output like in the screenshot below, something went wrong. In that case we recommend checking your computer's network setting (make sure DHCP is enabled) and carefully go through the instructions again.
 
 ![MacOS Failed Ping Response](images/mac_ping_fail.png)
 
@@ -162,4 +162,61 @@ The first command should output `v5.11.1` (we only care about the 5 in the begin
 
 ## A First JavaScript Program
 
+After all the preparation we can finally write our own code and run it on the RPi. The classic _hello world_ turns into a one-liner in JavaScript. Simply create a file, for example `hello.js`, containing only
+
+```js
+console.log('Hello World');
+```
+
+We can now run this program from the command line with
+
+```sh
+node hello.js
+```
+
+As simple as that. We can now leverage the full power of JavaScript (EcmaScript 6) and NodeJS. If you are already familiar with JavaScript but not NodeJS, the #[documentation](https://nodejs.org/api/documentation.html) will certainly be useful.
+
+Let's do another more interesting example. In the #[CC3200 tutorial](https://github.com/greeniot/CC3200-Sample) we have shown how to send a HTTP(S) request as well as receive the answer and analyze the results. What took quite some time and many lines of C(++) code can now be done effortlessly in fewer than ten self-explanatory lines:
+
+```js
+var http = require('http');
+
+http.get('http://httpbin.org/bytes/4', (res) => {
+    var str = '';
+    res.on('data', (chunk) => {str += chunk;});
+    res.on('end', () => {console.log(str);});
+}).on('error', (e) => {console.log(`error: ${e.message}`);});
+```
+
+Here we query #[httpbin.org](http://httpbin.org/) for four random bytes. Therefore the output of this program is 4 random symbols. Note that some bytes represent non-printable symbols.
+
+While a HTTPS request required much more effort compared to HTTP on the CC3200 Launchpad, NodeJS now does all the heavy lifting for us. We can basically replace each occurrance of `http` with `https` in the code sample above. In the following example we query #[random.org](https://www.random.org/) for a uniformly distributed random integer from 1 to 100. We also output some meta data about the request, which gives us some insight into what is actually going on behind the scenes.
+
+```js
+var https = require('https');
+
+https.get('https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new',
+(res) => {
+        console.log('headers: ', res.headers);
+        var str = '';
+        res.on('data', (chunk) => {str += chunk;});
+        res.on('end', () => {console.log(str);});
+}).on('error', (e) => {console.error(`error: ${e.message}`);});
+```
+
 ## References
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
