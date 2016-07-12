@@ -174,7 +174,13 @@ We can now run this program from the command line with
 node hello.js
 ```
 
-As simple as that. We can now leverage the full power of JavaScript (EcmaScript 6) and NodeJS. If you are already familiar with JavaScript but not NodeJS, the #[documentation](https://nodejs.org/api/documentation.html) will certainly be useful.
+As simple as that. We can now leverage the full power of JavaScript (EcmaScript 6) and NodeJS. If you are already familiar with JavaScript but have not used NodeJS, the #[documentation](https://nodejs.org/api/documentation.html) will certainly be useful.
+
+## Some JavaScript examples
+
+>:exclamation: For the samples in this section the Raspberry Pi needs to be connected to the internet.
+
+### HTTP
 
 Let's do another more interesting example. In the #[CC3200 tutorial](https://github.com/greeniot/CC3200-Sample) we have shown how to send a HTTP(S) request as well as receive the answer and analyze the results. What took quite some time and many lines of C(++) code can now be done effortlessly in fewer than ten self-explanatory lines:
 
@@ -190,6 +196,8 @@ http.get('http://httpbin.org/bytes/4', (res) => {
 
 Here we query #[httpbin.org](http://httpbin.org/) for four random bytes. Therefore the output of this program is 4 random symbols. Note that some bytes represent non-printable symbols.
 
+### HTTPS
+
 While a HTTPS request required much more effort compared to HTTP on the CC3200 Launchpad, NodeJS now does all the heavy lifting for us. We can basically replace each occurrance of `http` with `https` in the code sample above. In the following example we query #[random.org](https://www.random.org/) for a uniformly distributed random integer from 1 to 100. We also output some meta data about the request, which gives us some insight into what is actually going on behind the scenes.
 
 ```js
@@ -197,12 +205,43 @@ var https = require('https');
 
 https.get('https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new',
 (res) => {
-        console.log('headers: ', res.headers);
-        var str = '';
-        res.on('data', (chunk) => {str += chunk;});
-        res.on('end', () => {console.log(str);});
+    console.log('headers: ', res.headers);
+    var str = '';
+    res.on('data', (chunk) => {str += chunk;});
+    res.on('end', () => {console.log(str);});
 }).on('error', (e) => {console.error(`error: ${e.message}`);});
 ```
+
+
+### Audio via Headphone Jack
+
+Finally, let's try to make use of the RPi's 3.5mm headphone jack. Before we can stream music to the headphone jack via JavaScript we need to install some packages:
+
+```sh
+sudo apt-get install libasound2-dev
+npm install --save speaker lame
+```
+
+Next we need an audio file that we want to play. To this end open another terminal on your computer (no ssh connection). Navigate to the directory with the desired audio file, e.g., `megahit.mp3`. We will use _save copy_ to copy the audio file to the Raspberry Pi:
+
+```sh
+scp megahit.mp3 pi@169.254.0.XXX:/Music/
+```
+
+The JavaScript itself is again pretty self-explanatory:
+
+```js
+var fs = require('fs');
+var lame = require('lame');
+var Speaker = require('speaker');
+
+fs.createReadStream('/home/pi/Music/megahit.mp3')
+    .pipe(new lame.Decoder())
+    .on('format', function (format) {this.pipe(new Speaker(format));})
+    .on('error', (e) => {console.error(`error: ${e.message}`);});
+```
+
+## Using the GPIO Pin
 
 ## References
 
