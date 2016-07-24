@@ -178,7 +178,7 @@ As simple as that. We can now leverage the full power of JavaScript (EcmaScript 
 
 ## Some JavaScript examples
 
->:exclamation: For the samples in this section the Raspberry Pi needs to be connected to the internet.
+>:exclamation: For the first two examples in this section the Raspberry Pi needs to be connected to the internet. For the third example one only needs internet connection to install the necessary packages. (We will provide SD cards with images that already have the necessary packages installed.)
 
 ### HTTP
 
@@ -215,7 +215,9 @@ https.get('https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&fo
 
 ### Audio via Headphone Jack
 
-Finally, let's try to make use of the RPi's 3.5mm headphone jack. Before we can stream music to the headphone jack via JavaScript we need to install some packages:
+Finally, let's try to make use of the RPi's 3.5mm headphone jack. Before we can stream music to the headphone jack via JavaScript we need to install some packages.
+
+>:exclamation: This step requires a working internet connection. (We will provide SD cards with images that already have the necessary packages installed.)
 
 ```sh
 sudo apt-get install libasound2-dev
@@ -230,7 +232,7 @@ scp megahit.mp3 pi@169.254.0.XXX:/Music/
 
 Again, recall that `XXX` has to be replaced by the correct number you assigned to the RPi.
 
-The JavaScript itself is again pretty self-explanatory:
+The JavaScript code itself is again pretty short and self-explanatory:
 
 ```js
 var fs = require('fs');
@@ -245,22 +247,48 @@ fs.createReadStream('/home/pi/Music/megahit.mp3')
 
 ## Using the GPIO Pin
 
-TODO: install johnny-five and raspi-io
+Everything we did so far, we could have run on any machine with NodeJS and the necessary packages installed. Now we want to actually use the RPi as an embedded device by accessing its GPIO pins.
+
+First we need to install the necessary libraries. The `raspi-io` library handles the low level control of the GPIO pins while `johnny-five` allows for a simple high level workflow.
+
+>:exclamation: This step requires a working internet connection. (We will provide SD cards with images that already have the necessary packages installed.)
+
+```sh
+npm install johnny-five raspi-io
+```
+
+We have finally come to the point where we can write our first _hello world of embedded devices_, the blinking LED. We simply follow the official example at [johnny-five](http://johnny-five.io/examples/raspi-io/).
 
 ```js
-var five = require("johnny-five");
-var raspi = require("raspi-io");
-var board = new five.Board({
-    io: new raspi()
+var jf = require("johnny-five");
+var rpio = require("raspi-io");
+var board = new jf.Board({
+    io: new rpio()
 });
 
 board.on("ready", function() {
-    var led = new five.Led("P1-13");
+    var led = new jf.Led("P1-13");
     led.blink();
 });
 ```
 
+TODO: Pin Layout
+
+## Virtual Network Computing (VNC)
+
+If at some point you feel that you really want to work with the graphical user interface of the Raspbian OS, but do not have a monitor, you can share the RPi's Desktop with your laptop via VNC. This allows us to remotely control the desktop interface of the RPi. That means that you see exactly what a monitor connected to the RPi would show in a window on your laptop and you can interact it in exactly the same way.
+
+We will use TightVNC:
+
+```sh
+sudo apt-get install tightvncserver
+```
+
+TODO
+
 ## References
+
+http://www.webondevices.com/install-node-js-on-a-raspberry-pi-and-run-javascript/
 
 TODO
 
