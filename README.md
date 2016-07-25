@@ -300,7 +300,9 @@ You can learn more about the pin naming and functions in the [documentation of r
 
 If at some point you feel that you really want to work with the graphical user interface of the Raspbian OS, but do not have a monitor, you can share the RPi's Desktop with your laptop via virtual network computing (VNC). This allows us to remotely control the desktop interface of the RPi. You'll see in a window on your laptop exactly what a monitor connected to the RPi would show. You can interact with the virtual desktop in the exact same way as if the mouse and keyboard where hooked up to the RPi.
 
-We will use TightVNC:
+We will use TightVNC.
+
+>:exclamation: This step requires a working internet connection. (We will provide SD cards with images that already have the necessary packages installed.)
 
 ```sh
 sudo apt-get install tightvncserver
