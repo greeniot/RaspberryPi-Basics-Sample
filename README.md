@@ -223,7 +223,7 @@ Here we query [httpbin.org](http://httpbin.org/) for four random bytes. Therefor
 
 ### HTTPS
 
-While a HTTPS request required much more effort compared to HTTP on the CC3200 Launchpad, NodeJS now does all the heavy lifting for us. We can basically replace each occurrance of `http` with `https` in the code sample above. In the following example we query [random.org](https://www.random.org/) for a uniformly distributed random integer from 1 to 100. We also output some meta data about the request, which gives us some insight into what is actually going on behind the scenes.
+While a HTTPS request required much more effort compared to HTTP on the CC3200 Launchpad, NodeJS now does all the heavy lifting for us. We can basically replace each occurrance of `http` with `https` in the code sample above. In the following example we query [random.org](https://www.random.org/) for a uniformly distributed random integer from 1 to 100. We also output meta data about the request which gives us some insight into what is actually going on behind the scenes.
 
 ```js
 var https = require('https');
@@ -249,20 +249,20 @@ sudo apt-get install libasound2-dev
 npm install --save speaker lame
 ```
 
-Next we need an audio file that we want to play. To this end open another terminal on your laptop (no ssh connection). Navigate to the directory with the desired audio file, e.g., `megahit.mp3`. We will use _save copy_ to copy the audio file to the Raspberry Pi:
+Next we need an audio file that we want to play. To this end open a fresh terminal on your laptop (no ssh connection to the RPi). Navigate to the directory with the desired audio file, e.g., `megahit.mp3`. We will use the **s**ave **c**o**p**y tool to copy the audio file to the Raspberry Pi:
 
 ```sh
 scp megahit.mp3 pi@169.254.0.XXX:/Music/
 ```
 
-Again, recall that `XXX` has to be replaced by the correct number you assigned to the RPi.
+Again, recall that `XXX` has to be replaced by the correct number you assigned to the RPi. For more information about the save copy command you can read its manpages `man scp`.
 
 The JavaScript code itself is again pretty short and self-explanatory:
 
 ```js
-var fs = require('fs');
-var lame = require('lame');
-var Speaker = require('speaker');
+var fs = require('fs'); // we need access to the file system
+var lame = require('lame'); // lame is an open source mp3 encoder
+var Speaker = require('speaker'); // access to sound drivers/headphone jack
 
 fs.createReadStream('/home/pi/Music/megahit.mp3')
     .pipe(new lame.Decoder())
@@ -297,11 +297,11 @@ board.on("ready", function() {
 });
 ```
 
-You can learn more about the pin naming and functions in the [documentation of rasp-io](https://github.com/nebrius/raspi-io/) (in particular also [here](https://github.com/nebrius/raspi-io/wiki/Pin-Information)) and in the [examples section](http://johnny-five.io/examples/) of the johnny-five homepage. A very basic description of GPIO pins in general can be found on the official [Rapsberry Pi Homepage](https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/README.md). From here on it is mostly a matter of reading documentations and tutorials as well as trial and error to create truly awesome applications.
+You can learn more about the pin naming and functions in the [documentation of raspi-io](https://github.com/nebrius/raspi-io/) (in particular also [here](https://github.com/nebrius/raspi-io/wiki/Pin-Information)) and in the [examples section](http://johnny-five.io/examples/) of the johnny-five homepage. A very basic description of GPIO pins in general can be found on the official [Rapsberry Pi Homepage](https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/README.md). From here on it is mostly a matter of reading documentations and tutorials as well as trial and error to create truly awesome embedded applications.
 
 ## Virtual Network Computing
 
-If at some point you feel that you really want to work with the graphical user interface of the Raspbian OS, but do not have a monitor, you can share the RPi's Desktop with your laptop via virtual network computing (VNC). This allows us to remotely control the desktop interface of the RPi. You'll see in a window on your laptop exactly what a monitor connected to the RPi would show. You can interact with the virtual desktop in the exact same way as if the mouse and keyboard where hooked up to the RPi.
+If at some point you feel that you really want to work with the graphical user interface of the Raspbian OS, but do not have a monitor, you can share the RPi's Desktop with your laptop via virtual network computing (VNC). This allows us to remotely control the desktop interface of the RPi. You'll see in a window on your laptop exactly what a monitor connected to the RPi would show. You can interact with the virtual desktop in the exact same way as if your laptop mouse/touchpad and keyboard where hooked up to the RPi.
 
 We will use TightVNC.
 
@@ -311,29 +311,29 @@ We will use TightVNC.
 sudo apt-get install tightvncserver
 ```
 
-If the installation finished successfully, we can launch a virtual server
+Once the installation finished successfully, we can launch a virtual server
 
 ```sh
 tightvncserver
 ```
 
-You will be asked to enter your a password and an optional view-only password. While anyone with the first password you enter can view and control the RPi remotely once you the VNC server runs on the RPi, the second password only provides view rights. That is like looking over someone's shoulder while they are using a laptop. You can see everything that's going on, but you can't intervene.
+You will be asked to enter a password and an optional view-only password. While anyone with the first password you enter can view and control the RPi remotely once the VNC server runs on the RPi, the second password only provides view rights. That is like looking over someone's shoulder while they are using a laptop. You can see everything that's going on, but you can't intervene. For this tutorial we will choose `raspberry` as a password both times.
 
-Next we can start the VNC server. It takes several options which you can check out via `man vncserver`. A typical launch command would for example be
+Next we can start the VNC server. The `vncserver` command takes several options which are explained in detail in the manpages `man vncserver`. A typical launch command looks like
 
 ```sh
 vncserver :1 -geometry 1920x1080 -depth 24
 ```
 
-The `:1` specifies the so called display number. Note that the number `:0` is reserved by default, thus we should use a number greater than 0 for our display. The `-geometry` options determines the resolution, here we are displaying the desktop in full HD. Finally `-depth` specifies the color depth (must be between `8` and `32`).
+The `:1` specifies the so called display number. Note that the number `:0` is reserved by default, thus we should use a number greater than 0 for our display. The `-geometry` options determines the resolution, here we are displaying the desktop in full HD. The `-depth` option specifies the color depth (must be between `8` and `32`).
 
-As already mentioned there is always an X session running on display `:0`. To save resources it is a good idea to shut down the display manager
+As already mentioned there is always an X session running on display `:0` thus we have now two X sessions running. To save resources it is a good idea to shut down the display manager
 
 ```sh
 service lightdm stop
 ```
 
-The RPi is now ready. The VNC server is running and we can connect to it from our laptop. The connection process depends on the operating system. Before we go into that, to quit the VNC server running on the RPi simply type
+The RPi is now ready. The VNC server is running and we can connect to it from our laptop. The connection process itself depends on the operating system on your laptop. Before we go into that, to quit the VNC server on the RPi simply type
 
 ```sh
 vncserver -kill :1
@@ -343,33 +343,33 @@ vncserver -kill :1
 
 ### Linux
 
-It is likely that your Linux distribution already ships with a remote desktop viewer. Just search for a `Remote Desktop Viewer` application in the menu bar. When asked for the address or hostname of the VNC server, enter `vnc://169.254.0.XXX:5901`, where `XXX` needs to be replaced by the number you used for the IP address of the RPi. The weird number `5901` is explained at the end of this section. You will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi. Then the desktop of the Raspberry should pop up in its own window.
+It is likely that your Linux distribution already ships with a remote desktop viewer. Just search for a `Remote Desktop Viewer` application in the menu bar. When asked for the address or hostname of the VNC server, enter `169.254.0.XXX:5901`, where `XXX` needs to be replaced by the number you used for the IP address of the RPi. Depending on the application you might be required to use `vnc://169.254.0.XXX:5901` instead. The weird number `5901` is explained at the end of this section. You will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi. Then the desktop of the Raspberry should pop up in a new window.
 
-If your distribution does not contain a remote desktop viewer, you can install TightVNC just like we did on the RPi. Note that while we installed `tightvncserver` on the RPi we now just want a viewer. So on your laptop (*not the RPi*) type
+If your distribution does not contain a remote desktop viewer, you can install TightVNC almost like we did on the RPi. Note that while we installed `tightvncserver` on the RPi we now just want a viewer. So on your laptop (*not the RPi*) type
 
 ```sh
 sudo apt-get install xtightvncviewer
 ```
 
-To connect to the running session on the RPi simply type
+To connect to the running session on the RPi simply enter
 
 ```sh
 vncviewer 169.254.0.XXX:5901
 ```
 
-Again, you might have to replace `5901` by `1` or `5501` and `XXX` by the number you used for the RPi's IP address.
+Again, you might have to replace `:5901` by `:1` or `:5501` as explained at the end of the section.
 
 ### Windows
 
-On Windows you can download a VNC viewer software (32 or 64 bit) from [tightvnc.com](http://www.tightvnc.com/). After installation, launch the `TightVNC viewer` from the start menu. You will be asked for an IP address or hostname of the VNC server you want to connect to. Enter `169.254.0.XXX::5901`, where you need to replace `XXX` with the number you chose for the IP address of the RPi. If that is not working, instead of `::5901` also try `:5901` or simply `:1`. The weird number `5901` is explained at the end of this section. Next, click `Connect` and you will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi. Then the desktop of the Raspberry should pop up in its own window.
+On Windows you can download a VNC viewer software (32 or 64 bit) from [tightvnc.com](http://www.tightvnc.com/). After installation, launch the `TightVNC viewer` from the start menu. You will be asked for an IP address or hostname of the VNC server you want to connect to. Enter `169.254.0.XXX::5901`, where you need to replace `XXX` with the number you chose for the IP address of the RPi. If that is not working, instead of `::5901` also try `:5901` or simply `:1`. The weird number `5901` is explained at the end of this section. Next, click `Connect` and you will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi. Then the desktop of the Raspberry should pop up in a new window.
 
 ### MacOS
 
-On MacOS you do not need any extra software. There is an inbuilt Screen Sharing app, which is located at `System/Library/CoreServices/Application/Screen Sharing.app`. You can also just search for Screen Sharing with Spotlight. When you launch the screen sharing app you will be asked to enter the hostname of the VNC server. Here we enter the IP address of the RPi followed by the number `5901`, see image below. The weird number `5901` is explained at the end of this section. You will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi.
+On MacOS you do not need any extra software. There is an inbuilt Screen Sharing app, which is located at `System/Library/CoreServices/Application/Screen Sharing.app`. You can also just search for _Screen Sharing_ with Spotlight. When you launch the screen sharing app you will be asked to enter the hostname of the VNC server. Here we enter the IP address of the RPi followed by the number `:5901`, see image below. The weird number `5901` is explained at the end of this section. When you click on `Connect` you will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi. Then the desktop of the Raspberry should pop up in a new window.
 
 ![MacOS Screen Sharing](images/mac_vnc.png)
 
-Alternatively, you can also just open Finder, click on *Go* in the menu bar and then *Connect to Server...* (or simply press `⌘K`). Then enter `vnc://169.254.0.XXX:5901` (replace `XXX` by the number you chose in the RPi's IP address), like in this screenshot
+Alternatively to the Screen Sharing app, you can also just open Finder, click on *Go* in the menu bar at the very top of you desktop and then *Connect to Server...* (or simply press `⌘K`). Then enter `vnc://169.254.0.XXX:5901` (replace `XXX` by the number you chose in the RPi's IP address), like in this screenshot
 
 ![MacOS Screen Sharing Alternative](images/mac_vnc_go.png)
 
@@ -377,9 +377,9 @@ Either way the desktop of the Raspberry should pop up in a window like the one b
 
 ![MacOS Screen Sharing Alternative](images/mac_vnc_desktop.png)
 
->:information_source: The last digit `1` in `5901` corresponds to the display number `:1` we specified on the RPi. The number `5900` is often used as the standard default port for VNC starting at 0. Hence to get to display `:1`, we add 1 to arrive at `5901`. If that does not work, you might also try just `:1` instead of `:5901`.
+>:information_source: The last digit `1` in `5901` corresponds to the display number `:1` we specified on the RPi. The number `5900` is often used as the standard default port for VNC starting at 0. Hence to get to display `:1`, we add 1 to arrive at `5901`. If that does not work, you might also try just `:1` (the port is found automatically) or `:5501` (a different port that is sometimes used) instead of `:5901`.
 
->:information_source: If you want the RPi to launch a VNC server on startup so that you can always connect with a VNC viewer right after it booted and for further information on setting up a VNC server on the RPi follow the [instructions here](https://www.raspberrypi.org/documentation/remote-access/vnc/README.md).
+>:information_source: If you want the RPi to launch a VNC server automatically on startup so that you can always connect with a VNC viewer right after it booted and for further information on setting up a VNC server on the RPi follow the [instructions here](https://www.raspberrypi.org/documentation/remote-access/vnc/README.md).
 
 ## References
 
