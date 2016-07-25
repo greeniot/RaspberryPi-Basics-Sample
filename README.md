@@ -29,15 +29,15 @@ Raspberry Pi. Some Raspberry Pi 3 specific topics will be marked as such.
 
 ## Overview
 
-In contrast to a regular computer the Raspberry Pi (*RPi*) does not have a built in hard drive or SSD. Therefore we have to provide the operating system (*OS*) and all persistent data as an image on an SD card. In the first part of this tutorial we will see how to build such an image, get the RPi running and connect it to a computer so we can control it.
+In contrast to a regular computer the Raspberry Pi (*RPi*) does not have a built-in hard drive or SSD. Therefore we need to provide the operating system (*OS*) and all persistent data as an image on an SD card. In the first four sections of this tutorial we will see how to build such an image, get the RPi running and connect it to a computer so we can control it.
 
-Once we can access the RPi remotely, we will install *NodeJS* and write some JavaScript to verify that NodeJS is working correctly. This enables us to install *raspio* and *johnny-five* via *npm* to take control over the RPi's GPIO pins. After a classic LED-blinking tutorial, we will turn towards some more specialized capabilities of the RPi 3 and send out HTTP(S) requests via WiFi.
+Once we can access the RPi remotely, we will install *NodeJS* and write some JavaScript to verify that NodeJS is working correctly. This enables us to install *raspio* and *johnny-five* via *npm* to take control over the RPi's GPIO pins. Besides a classic LED-blinking tutorial, the *hello world* of embedded devices and some audio streaming, we will also turn towards some more specialized capabilities of the RPi 3 and send out HTTP(S) requests via WiFi.
 
->:information_source: For the study group we will provide SD cards with prebuilt images that already contain the software stack for various tasks. If you are not planning to setup a RPi yourself, you can thus skip sections [Requirements](#setup-the-operating-system-image) and [The RPi as a Regular Computer](#the-rpi-as-a-regular-computer).
+>:information_source: For the study group we will provide SD cards with pre-built images that already contain the software stack for various tasks. If you are not planning to setup a RPi yourself, you can thus skip sections [Setup the Operating System Image](#setup-the-operating-system-image) and [The RPi as a Regular Computer](#the-rpi-as-a-regular-computer) and go straight to [Connecting via SSH](#connecting-via-ssh).
 
 ## Setup the Operating System Image
 
-First, we will install the Raspbian operating system for the Raspberry Pi. You can download the zip file [https://www.raspberrypi.org/downloads/raspbian/](here). Raspberrypi.org also provides an [https://www.raspberrypi.org/documentation/installation/installing-images/README.md](excellent installation guide) for Linux, MacOS and Windows.
+First, we will install the Raspbian operating system for the Raspberry Pi. You can download the zip file from [here](https://www.raspberrypi.org/downloads/raspbian/). The official Raspberry Pi homepage also provides an [excellent installation guide](https://www.raspberrypi.org/documentation/installation/installing-images/README.md) for Linux, MacOS and Windows.
 
 
 >:information_source: We will stick to the plain foundation's officially supported OS Raspbian as opposed to others. While installing Rapsbian as described above should not pose any problems, it might be even easier for beginners to start out with NOOBS (which contains Raspbian).
@@ -381,7 +381,6 @@ Either way the desktop of the Raspberry should pop up in a window like the one b
 ## References
 
 * [Direct Connection Tutorial](https://pihw.wordpress.com/guides/direct-network-connection/)
-* [Raspberry Pi](https://www.raspberrypi.org/)
 * [Raspberry Pi Usage Examples](https://www.raspberrypi.org/documentation/usage/)
 * [Raspberry Pi VNC Tutorial](https://www.raspberrypi.org/documentation/remote-access/vnc/README.md)
 * [NodeJS Documentation](https://nodejs.org/api/documentation.html)
