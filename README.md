@@ -51,6 +51,7 @@ The RPi comes equipped with plentiful interfaces precisely for this mode of oper
 While this is a very convenient and intuitive way to interact with the RPi, it is not the approach we want to take here. Thus we are not going into more detail at this point. Typical use cases for the RPi do not involve it being hooked up to a monitor, keyboard and mouse all the time. We want to operate it as a standalone embedded device, but still be able to control it remotely. Let us discuss this mode of operation in the next section.
 
 >:exclamation: Make sure that the power supply delivers sufficient current for your model. Of course, the power requirements depend heavily on the model, the peripherals and the task. The official homepage recommends the following specifications
+
 | Product   | Recommended | Max. USB Draw | Bare-Board |
 | --------- | ----------- | ------------- | ---------- |
 | Model A   | 700mA       | 500mA         | 200mA      |
@@ -337,7 +338,7 @@ vncserver -kill :1
 
 ### Linux
 
-It is likely that your Linux distribution already ships with a remote desktop viewer. Just search for a `Remote Desktop Viewer` application in the menu bar. When asked for the address or hostname of the VNC server, enter `vnc://169.254.0.X:5901`. The weird number `5901` is explained at the end of this section. You will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi. Then the desktop of the Raspberry should pop up in its own window.
+It is likely that your Linux distribution already ships with a remote desktop viewer. Just search for a `Remote Desktop Viewer` application in the menu bar. When asked for the address or hostname of the VNC server, enter `vnc://169.254.0.XXX:5901`, where `XXX` needs to be replaced by the number you used for the IP adress of the RPi. The weird number `5901` is explained at the end of this section. You will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi. Then the desktop of the Raspberry should pop up in its own window.
 
 If your distribution does not contain a remote desktop viewer, you can install TightVNC just like we did on the RPi. Note that while we installed `tightvncserver` on the RPi we now just want a viewer. So on your computer (*not the RPi*) type
 
@@ -348,14 +349,14 @@ sudo apt-get install xtightvncviewer
 To connect to the running session on the RPi simply type
 
 ```sh
-vncviewer 169.254.0.X:5901
+vncviewer 169.254.0.XXX:5901
 ```
 
-Again, you might have to replace `5901` by `1` or `5501` and `X` by the number you used for the RPi's IP adress.
+Again, you might have to replace `5901` by `1` or `5501` and `XXX` by the number you used for the RPi's IP adress.
 
 ### Windows
 
-On Windows you can download a VNC viewer software (32 or 64 bit) from [tightvnc.com](http://www.tightvnc.com/). After installation, launch the `TightVNC viewer` from the start menu. You will be asked for an IP adress or hostname of the VNC server you want to connect to. Enter `169.254.0.X::5901`, where you need to replace `X` with the number you chose for the IP adress of the RPi. If that is not working, instead of `::5901` also try `:5901` or simply `:1`. The weird number `5901` is explained at the end of this section. Next, click `Connect` and you will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi. Then the desktop of the Raspberry should pop up in its own window.
+On Windows you can download a VNC viewer software (32 or 64 bit) from [tightvnc.com](http://www.tightvnc.com/). After installation, launch the `TightVNC viewer` from the start menu. You will be asked for an IP adress or hostname of the VNC server you want to connect to. Enter `169.254.0.XXX::5901`, where you need to replace `XXX` with the number you chose for the IP adress of the RPi. If that is not working, instead of `::5901` also try `:5901` or simply `:1`. The weird number `5901` is explained at the end of this section. Next, click `Connect` and you will be asked for a password, which is the first one you entered when setting up the VNC server on the RPi. Then the desktop of the Raspberry should pop up in its own window.
 
 ### MacOS
 
@@ -363,7 +364,7 @@ On MacOS you do not need any extra software. There is an inbuilt Screen Sharing 
 
 ![MacOS Screen Sharing](images/mac_vnc.png)
 
-Alternatively, you can also just open Finder, click on *Go* in the menu bar and then *Connect to Server...* (or simply press `⌘K`). Then enter `vnc://169.254.0.X:5901` (replace `X` by the number you chose in the RPi's IP address), like in this screenshot
+Alternatively, you can also just open Finder, click on *Go* in the menu bar and then *Connect to Server...* (or simply press `⌘K`). Then enter `vnc://169.254.0.XXX:5901` (replace `XXX` by the number you chose in the RPi's IP address), like in this screenshot
 
 ![MacOS Screen Sharing Alternative](images/mac_vnc_go.png)
 
