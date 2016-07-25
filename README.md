@@ -85,7 +85,7 @@ dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 root=/dev/mmcblk0p2 roo
 
 You can now eject the SD card and put it back into the RPi.
 
->:information_source: If you encounter any problems in this step, check out [https://pihw.wordpress.com/guides/direct-network-connection/](this tutorial) for a more detailed description.
+>:information_source: If you encounter any problems in this step, check out [this tutorial](https://pihw.wordpress.com/guides/direct-network-connection/) for a more detailed description.
 
 ### Connecting via SSH
 
