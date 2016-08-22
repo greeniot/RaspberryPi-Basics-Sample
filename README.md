@@ -212,10 +212,10 @@ Let's do another more interesting example. In the [CC3200 tutorial](https://gith
 ```js
 var http = require('http');
 
-http.get('http://httpbin.org/bytes/4', (res) => {
+http.get('http://httpbin.org/bytes/4', (req) => {
     var str = '';
-    res.on('data', (chunk) => {str += chunk;});
-    res.on('end', () => {console.log(str);});
+    req.on('data', (chunk) => {str += chunk;});
+    req.on('end', () => {console.log(str);});
 }).on('error', (e) => {console.log(`error: ${e.message}`);});
 ```
 
@@ -229,11 +229,11 @@ While a HTTPS request required much more effort compared to HTTP on the CC3200 L
 var https = require('https');
 
 https.get('https://www.random.org/integers/?num=1&min=1&max=100&col=1&base=10&format=plain&rnd=new',
-(res) => {
-    console.log('headers: ', res.headers);
+(req) => {
+    console.log('headers: ', req.headers);
     var str = '';
-    res.on('data', (chunk) => {str += chunk;});
-    res.on('end', () => {console.log(str);});
+    req.on('data', (chunk) => {str += chunk;});
+    req.on('end', () => {console.log(str);});
 }).on('error', (e) => {console.error(`error: ${e.message}`);});
 ```
 
